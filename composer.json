@@ -1,0 +1,8 @@
+{
+    "name": "inspheric/support",
+    "autoload": {
+        "psr-4": {
+            "Inspheric\\Support\\": "src/"
+        }
+    }
+}
