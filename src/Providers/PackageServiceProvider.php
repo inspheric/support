@@ -4,13 +4,11 @@ namespace Inspheric\Support\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Inspheric\Support\Traits\PackageProvider;
 
 use Closure;
 
 abstract class PackageServiceProvider extends ServiceProvider
 {
-    use PackageProvider;
 
     /**
     * This namespace is applied to your controller routes.
@@ -58,7 +56,7 @@ abstract class PackageServiceProvider extends ServiceProvider
     public function registerConfig()
     {
         if ($this->notOverridden('config')) {
-            $this->mergeConfigFrom($this->basePath('config/'.$this->name.'.php'), $this->name);
+            $this->mergeConfigFrom($this->basePath('config/config.php'), $this->name);
         }
     }
 
@@ -71,7 +69,7 @@ abstract class PackageServiceProvider extends ServiceProvider
     {
         if ($this->notOverridden('config')) {
             $this->publishes([
-                $this->basePath('config/'.$this->name.'.php') => config_path($this->name.'.php'),
+                $this->basePath('config/config.php') => config_path($this->name.'.php'),
             ], 'config');
         }
 
@@ -187,6 +185,12 @@ abstract class PackageServiceProvider extends ServiceProvider
         ], function ($router) {
             require $this->basePath('routes/api.php');
         });
+    }
+
+    public function basePath($path = null)
+    {
+        $base = dirname(dirname(dirname((new \ReflectionClass($this))->getFileName())));
+        return $base.'/'.trim($path,'/');
     }
 
 }
